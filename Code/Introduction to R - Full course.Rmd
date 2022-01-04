@@ -1,0 +1,560 @@
+---
+title: "Introduction to R"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Workflow basics
+
+Here, we will cove the basics of using R including:
+
+* Data types
+* Documenting your code
+* Basic maths
+* Boolean operators
+* Creating and removing variables
+* Calling functions
+* Installing and loading libraries
+
+## Basic data types
+
+* Characters (Strings)
+* Numeric
+* Integer
+  + These are whole numbers, looking at the code below we can see there is a warning when assigning a non-whole number to an integer
+* Logical (boolean)
+  + Can be shortened to T or F
+
+```{r}
+"This is a string"
+1.23
+1L
+1.23L
+TRUE
+T
+FALSE
+F
+
+```
+
+## Documenting code
+
+* Documenting your code is one of the most important things to do.
+* Whilst what you write might make sense to you at the time, what if you have to go back several months down the line? What if you're off and someone needs to make modifications quickly?
+* Comments can be a life saver in these cases!
+* To comment, simply use '#' before what you want to write
+* You can also make your code more navigable with section headers
+* To do this use the hotkey 'ctrl+shift+r'
+* You can then use the dropdown list at the bottom of your code window
+
+
+![](img/code_meme.jfif)
+
+**Look at the code snippet below for examples**
+
+```{r commenting_code}
+2 # This will run
+#2 # This will not
+
+# Section header example --------------------------------------------------
+# ctrl+shift+r gives section headings that can be navigated using the dropdown list at the bottom of your code window
+
+
+```
+
+## Mathematical operators
+
+Here you will learn how to do the basic mathematical operators in R
+
+### Basic maths
+
+* Multiplication is done using the '*' operator
+* Division is done through the '/' operator
+* Addition is done through the '+' operator
+* Subtraction is done through the '-' operator
+* Indices (Power of) done through '^' operator
+  + Can see that large numbers come out as scientific notation (4.722366e+21 in this case)
+  + Can stop this by writing 'options(scipen = 9999999)' at the top of your script
+* BIDMASS
+  + R respects the rules of BIDMASS by default
+  + Might remember this from school, basically the order of which maths is done
+  + Brackets, Indices, Division, Multiplication, Addition, Subtraction
+
+```{r multiplication}
+8*8
+```
+
+```{r division}
+8/8
+```
+
+```{r addition}
+8+8
+```
+
+```{r subtraction}
+8-8
+```
+
+```{r indicies}
+16^18
+options(scipen = 9999999)
+16^18
+```
+
+```{r bidmass}
+3+3*8
+(3+3)*8
+```
+## Logical (boolean)
+
+### Mathematical
+
+* Need to check if something is true or false
+* e.g. is *x* greater than *y*
+* Done using '>', '<' and '=='
+* '==' can also be done with strings
+```{r maths_boolean}
+5==8 # Equal to
+
+5>8 # Greater than
+
+5<8 # Less than
+
+"this" == "this"
+
+```
+
+
+### Boolean operators (logic gates)
+
+* Three main ones
+  + AND - In R this us '&'
+  + OR - In R this is '|'
+  + NOT - In R this is '!'
+* Others not covered here:
+  + XOR
+  + NAND
+  + NOR
+  + XNOR
+* Can also use brackets to both make things more readable and do more complex functionality
+
+```{r and_or_not}
+("this" == "that") & (5 == 5)
+
+("this" == "that") | (5 == 5)
+
+"this" != "that"
+!("this" == "that")
+
+(("this" == "this") & !("this" == "that")) & (("that" == "that") | "that" == "this")
+
+```
+
+## IF/ELSE
+
+* This is used for testing if a condition is true, then telling the code to do something based what the condition outputs
+  + Think of it like this: IF x EQUALS y THEN DO THIS
+* We can add else statements to this to make something happen if 
+  + Think of it like this: IF x EQUALS y THEN DO THIS. OTHERWISE, DO THIS
+* We can add else if statements to this indefinitely if required
+
+```{r if_else}
+if(5 == 5) {
+  print("5 is equal to 5")
+}
+
+if(5 > 6) {
+  print("This will not print")
+} else {
+  print("This will print")
+}
+
+if(5 > 6) {
+  print("This shouldnt print")
+} else if (5 == 6) {
+  print("This shouldnt print")
+} else {
+  print("This will print")
+}
+
+```
+
+
+
+
+## Creating and removing variables
+
+* Great, so we can do most of the basic functionality of R
+* One thing we are missing, and one of R's strengths, is how to store our data and results for real-time access
+* Here we will cover how to create variables, delete them and some of the more complex data types in R
+
+### Creating and removing variables
+
+* To assign something to a variable use the '<-' operator
+* You can also use the standard '=' but it is depreciated (no longer used) and so you might run into troubles in the future
+  + The Hotkey 'alt' + '-' is your friend here
+* Once assigned, you can then use it just like you would if you had just typed the data without assigning it a variable
+* Note that once you have created the variable, it appears within your environment pane along with it's value
+* for naming variables there are several conventions
+* Whilst it is recommenced that you use 'snake case' by the R developers, it is more important that you are consistent across all your code to help prevent common issues 
+  + Snake case has the following rules:
+    + all lower case
+    + spaces replaced with '_'
+    + e.g. this_is_snake_case
+
+```{r creating_variables}
+x <- 8
+y <- 12
+
+x
+y
+
+x+y
+x*y
+x/y
+
+x==y
+
+z <- x>y
+```
+  
+* You may also need to remove variables that are no longer needed
+* This is good practice as R can be very memory (RAM) intensive, so it's good to keep your environment as clear as possible
+* To do this simply use 'rm(variable_name)
+* Note that it will be removed from environment pane if done correctly
+* You can also remove everything from your environment using the command 'rm(list = ls())'
+
+```{r deleting_variables}
+rm(x,y,z)
+```
+
+
+### Vectors
+
+* A vector is a collection of elements that can be made up of a single data type
+* Creating a vector is done using the combine function (more on functions later), called 'c()'
+* **See the code below for creation of a vector and assigning it a variable**
+* Note that despite using 3 different data types, they all get converted to strings
+* If using all the same data type this is preserved
+* Note here that rather than having to type out the variable name to get it to print, we can simply wrap it in parentheses 
+
+```{r creating_vectors}
+
+vector_mixed <- c("string", 123, TRUE)
+vector_mixed
+
+(vector_numeric <- c(123, 456, 789))
+
+(vector_logical <- c(T, T, F, T, F, F))
+
+```
+* If required, we can access specific values within a vector using '[number]'
+* If you are used to other programming languages, it is worth noting that R is NOT 0 indexed
+  + This means that values within arrays/vectors start at 1 rather than 0
+  
+```{r addressing_vectors}
+vector_logical[1]
+vector_numeric[2]
+```
+
+* We can also add elements to a vector using the 'c()' function again
+* Lets add an NA value, i.e. missing data, to the numeric vector
+```{r ammending_vectors}
+(vector_numeric <- c(vector_numeric, NA))
+```
+### If Else - Vectorised
+
+
+## Calling functions
+
+* Functions are chunks of code designed to make code that would be tedious to write out each time simpler, increasing code readability and processign time
+* Within base R there are literally hundreds of thousands of functions
+* Range in functionality from simply adding up vectors to creating complex mathematical models
+* Functions in R are called like this:
+  + function_name(arg1 = val1, arg2 = val2, ...)
+  + where arg is short for argument and val is short for value
+* Lets test out the seq() function
+  + This makes **seq**uences of numbers
+* note that when you type 'seq' the function pops up for you to click on
+  + Not that good for this function, but with longer function names this can be a godsend
+  + Also gives you a snipped of what that function is expecting and does
+  + If you need more help, hitr 'F1' to get the help document open
+* The seq function needs two arguments, the starting value and final value
+
+```{r calling_functions1}
+seq(1, 10)
+```
+
+* There are also optional arguments in this function that enable additional functionality if requred
+* For example, we can make seq give us a sequence of numbers that increments by 2
+```{r calling_functions2}
+(x <- seq(0, 10, by = 2))
+```
+* Another good example would be summing up two vectors
+* This is done using the 'sum()' function
+
+```{r sum}
+sum(vector_numeric)
+```
+* Oh No! We are getting an NA rather than a number
+* Looking at the optional arguments for sum, we can see there is a way to omit NA's from the sum
+
+```{r sum_na}
+sum(vector_numeric, na.rm = T)
+```
+
+## Loops
+
+### For loops
+
+* For loops will run the same chunk of code a set amount of times that you can define
+* Facilitates automation (e.g. you need to make the same plot for 5 species)
+* In R, loops are less efficient than vectorised alternatives so should be avioded if possible
+* Still a good tool in your programming arsenal
+* For loops in R are created by created by defining a variable and a vector to loop over
+  + This vector can be any data type (e.g. numeric, character, etc.)
+* **Note the use of ':' to generare a sequence of numbers quickly**
+* I have also introduced a new function, paste
+  + This function will **paste** two bits of text together with a space in between
+  + It's sister function, **paste0** can be used to paste text together without the space
+  
+```{r for_loop}
+for(year in 2015:2020) {
+  
+  print(paste("The year is:", year))
+  
+}
+
+for(text in c("r", "is", "very", "cool")) {
+  
+  print(text)
+  
+}
+
+```
+
+### While Loops
+
+* Similar to for lops, while loops run a chunk of code while a condition is true
+* However, there is no indexing built into whilse loops
+* I find the use case of while loops quite limited in R, but they are needed it can be a life saver!
+
+```{r while_loops}
+
+i <- 1
+while(i <= 10) {
+  
+  print(i)
+  i <- i+1
+  
+}
+
+```
+
+## Data Frames/Tibbles
+
+### Creating dataframes
+
+* Probably the most common type of data used in R is a dataframe/tibble
+  + It is called a tibble when imported using the tidyverse framework (more on this later)
+  + However, user functionality wise they both work the same
+* You can think of a dataframe like an excel spreadsheet within R
+* To create a dataframe, we use the data.frame() function
+  + Within this function we specify the column names and what value shoudl be in there
+    + e.g. example_col = example_data
+  + When doing this, we have to make sure each column is the same length or we will get an error
+* To create our dataframe, I will use the seq function and two new functions
+  + runif, which generates random numbers
+    + This takes the arguments n (number of values), min and max (the minimum and maximum values)
+  + rep, which **rep**eats values a set number of times
+* The values you have will be different to mine due to the randomness of random number generators, but this will all still be applicable
+```{r creating_dataframes}
+example_data <- data.frame(
+  id = seq(1, 100),
+  speices = rep("cod", 100),
+  length = runif(n = 100, min = 10, max = 30),
+  weight = runif(n = 100, min = 400, max = 1000)
+)
+```
+
+### Examining dataframes
+
+* There are several ways we can now explore the dataset we have created
+* First, lets have a look at the first few rows
+* This is done using the 'head()' function, which takes two arguments
+  + The first argument is the dataframe name, the second is the number of rows you want to see
+  + The 2nd argument is 6 by default, lets just keep it at that for now
+
+```{r}
+head(example_data)
+```
+
+
+* Next lets look at the dataframes structure
+* This gives is the data type of each column and a subset of the values
+
+```{r str}
+str(example_data)
+```
+
+* Next, we can run 'summary()' on the data to see if there are any issues (NA's, too low/high values, etc)
+
+```{r summarise}
+summary(example_data)
+```
+
+* Looks good to me
+
+### Using dataframes
+
+* It's all good having a dataset, but how do we use the data in it
+* To access the data within a column, we use the data frame name, $, then the column name
+  + e.g. data$column
+* Accessing the data like this works in the same as vectors
+* Here, we will use some more mathematical functions to examine the data
+
+```{r}
+example_data$speices
+
+sum(example_data$weight) # Gets the total
+mean(example_data$length) # Gets the average
+range(example_data$length) # Gets the min and max
+```
+* We can also use 'dataframe[, column_number]' or 'dataframe[, "column_name"]' to get the values from specific columns
+* Generally not recommended as it's less readable and prone to issues but is required in rare cases
+
+```{r}
+example_data[,2]
+example_data[,"speices"]
+```
+
+* We can also access specific rows in the dataframe using 'dataframe[row_number, ]'
+
+```{r}
+example_data[1, ]
+```
+### Creating columns
+
+### Checking conditions in a dataframe
+
+## Installing and loading libraries
+
+* Often, you'll be trying to do something in R that is really complex and hard
+* In general, there will be a library that someone else has written that has already done most of the hard work for you
+* Additionally, there are packages designed for improving R's base functionality
+* Tidyverse, as described in the introduction slides, is a collection of such packages
+* Hence, installing and loading tidyverse will actually install & load several other packages, which are listed under 'Attaching packages'
+* To install packages, run the 'install.packages("package_name")' function
+* Once installed, load packages using the 'library(package_name)' function
+
+```{r}
+# install.packages("tidyverse")
+library(tidyverse)
+```
+
+* Sometimes several packages will have functions with the same name 
+* R will warn you about these when loading the packages
+* If this happens and you need to access a function from a specific package use: 'package_name::function_name()'
+
+## Exercise
+
+* put set.seet(1) at the top of your script
+  + This makes the random number generator consistent
+* Create a dataframe
+* 3 columns, 300 rows
+* Column 1: ID 1 to 300
+* Column 2: 100 measurements of 5 species, labeled A, B, C
+* Column 3: Randomly generate length for each species with the following conditions:
+  + Species A should have a length range of 1 - 100
+  + Species B should have a length range of 100 - 2000
+  + Species C should have a length range of 10 - 500
+* Column 4: Randomly generated weight for each species
+  + Species A should have a weight range of 100 - 10000
+  + Species B should have a length range of 0 - 1000
+  + Species C should have a length range of 10 - 5000
+
+Solve these problems with your data:
+* The length and weight variables are at a too high precision, find a **function** to **round** the variables to the following parameters:
+  + Length: 0 decimal places
+  + Weight: 2 decimal places
+
+* The people who recorded your data, Phil & Chibuzor, were a bit rubbish and didn't read your sampling procedure properly!
+  + They let you know that they recorded the length of species A in cm, not mm
+  + They have also recorded species B's weight in kg rather than grams if the weight was over 1000g, and you know that the species cannot be below 10 grams
+    + Find and count how many times they did it so you can berate them!
+    + Do this by checking the range of weights for species B, if anything is below 10 
+    + Then find a function to see what the **n**umber of **row**s are where the weight of species B is lass than 1000g
+
+* Now, find the average length and weight **for** each species
+
+```{r}
+set.seed(1)
+fish_data <- data.frame(
+  id = 1:300,
+  species = c(rep("A", 100),
+              rep("B", 100),
+              rep("C", 100)
+              ),
+  length = c(runif(n = 100, min = 1, max = 100),
+             runif(n = 100, min = 100, max = 200),
+             runif(n = 100, min = 10, max = 500)
+             ),
+  weight = c(runif(n = 100, min = 100, max = 10000),
+             runif(n = 100, min = 0, max = 1000),
+             runif(n = 100, min = 10, max = 5000)
+             )
+  )
+
+fish_data$length <- round(fish_data$length, 0)
+fish_data$weight <- round(fish_data$weight, 2)
+
+range(fish_data$weight[fish_data$species == "B"])
+
+nrow(fish_data[fish_data$species == "B" & fish_data$weight < 10, ])
+
+fish_data$weight <- ifelse(fish_data$species == "B" & fish_data$weight < 10, fish_data$weight*1000, fish_data$weight)
+range(fish_data$weight[fish_data$species == "B"])
+
+nrow(fish_data[fish_data$species == "B" & fish_data$weight < 10, ])
+
+for(sp in unique(fish_data$species)) {
+  print(sp)
+  print(paste("Average length:", mean(fish_data$length[fish_data$species == sp])))
+  print(paste("Average weight:", mean(fish_data$weight[fish_data$species == sp])))
+}
+
+```
+
+# Getting started with tidyverse
+
+## Loading data
+
+## Wrangling data
+
+### Filter
+
+### Mutate
+
+### Grouping
+
+### Summarise
+
+### Reshaping
+
+### Top/bottom rows
+
+## Data visulisation
+
+### Syntax
+
+### Bar plots
+
+### Scatter plots
+
+
+
+As des
